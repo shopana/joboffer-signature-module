@@ -1,0 +1,79 @@
+<!-- Navigation Header -->
+<nav class="bg-blue-600 text-white shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <h1 class="text-xl font-bold">Job Offer Management System</h1>
+        </div>
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4">
+          <a routerLink="/home" 
+             routerLinkActive="bg-blue-700" 
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+            Home
+          </a>
+          <a routerLink="/offer-form" 
+             routerLinkActive="bg-blue-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+            Create Offer
+          </a>
+          <a routerLink="/pdf-preview" 
+             routerLinkActive="bg-blue-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+            PDF Preview
+          </a>
+          <a routerLink="/status-tracker" 
+             routerLinkActive="bg-blue-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+            Status Tracker
+          </a>
+        </div>
+      </div>
+      
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button (click)="toggleMobileMenu()" 
+                class="inline-flex items-center justify-center p-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile menu -->
+  <div class="md:hidden" [class.hidden]="!isMobileMenuOpen">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      <a routerLink="/home" 
+         routerLinkActive="bg-blue-700" 
+         class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 transition-colors">
+        Home
+      </a>
+      <a routerLink="/offer-form" 
+         routerLinkActive="bg-blue-700"
+         class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 transition-colors">
+        Create Offer
+      </a>
+      <a routerLink="/pdf-preview" 
+         routerLinkActive="bg-blue-700"
+         class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 transition-colors">
+        PDF Preview
+      </a>
+      <a routerLink="/status-tracker" 
+         routerLinkActive="bg-blue-700"
+         class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 transition-colors">
+        Status Tracker
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="min-h-screen bg-gray-50">
+  <router-outlet></router-outlet>
+</main>

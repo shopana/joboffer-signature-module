@@ -1,0 +1,262 @@
+<!-- Job Offer Form Component -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-200">
+  <!-- Header -->
+  <div class="px-6 py-4 border-b border-gray-200">
+    <h2 class="text-lg font-medium text-gray-900 flex items-center">
+      <i class="fas fa-edit text-primary mr-2"></i>
+      Create Job Offer Letter
+    </h2>
+    <p class="mt-1 text-sm text-gray-600">Fill out the form below to generate and send a job offer letter for signature.</p>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+    <!-- Recipient Information Section -->
+    <div class="bg-gray-50 rounded-lg p-4">
+      <h3 class="text-md font-medium text-gray-900 mb-4 flex items-center">
+        <i class="fas fa-user-circle text-gray-600 mr-2"></i>
+        Recipient Information
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Recipient Name -->
+        <div>
+          <label for="recipientName" class="block text-sm font-medium text-gray-700 mb-2">
+            Recipient Name *
+          </label>
+          <input 
+            type="text" 
+            id="recipientName" 
+            formControlName="recipientName"
+            class="block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            [class.border-danger]="isFieldInvalid('recipientName')"
+            [class.border-gray-300]="!isFieldInvalid('recipientName')"
+            placeholder="Enter recipient's full name"
+          >
+          <div *ngIf="isFieldInvalid('recipientName')" class="text-danger text-xs mt-1">
+            {{ getFieldError('recipientName') }}
+          </div>
+        </div>
+
+        <!-- Recipient Email -->
+        <div>
+          <label for="recipientEmail" class="block text-sm font-medium text-gray-700 mb-2">
+            Recipient Email *
+          </label>
+          <input 
+            type="email" 
+            id="recipientEmail" 
+            formControlName="recipientEmail"
+            class="block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            [class.border-danger]="isFieldInvalid('recipientEmail')"
+            [class.border-gray-300]="!isFieldInvalid('recipientEmail')"
+            placeholder="recipient@company.com"
+          >
+          <div *ngIf="isFieldInvalid('recipientEmail')" class="text-danger text-xs mt-1">
+            {{ getFieldError('recipientEmail') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Job Details Section -->
+    <div class="bg-gray-50 rounded-lg p-4">
+      <h3 class="text-md font-medium text-gray-900 mb-4 flex items-center">
+        <i class="fas fa-briefcase text-gray-600 mr-2"></i>
+        Job Details
+      </h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Job Title -->
+        <div>
+          <label for="jobTitle" class="block text-sm font-medium text-gray-700 mb-2">
+            Job Title *
+          </label>
+          <input 
+            type="text" 
+            id="jobTitle" 
+            formControlName="jobTitle"
+            class="block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            [class.border-danger]="isFieldInvalid('jobTitle')"
+            [class.border-gray-300]="!isFieldInvalid('jobTitle')"
+            placeholder="e.g., Senior Software Engineer"
+          >
+          <div *ngIf="isFieldInvalid('jobTitle')" class="text-danger text-xs mt-1">
+            {{ getFieldError('jobTitle') }}
+          </div>
+        </div>
+
+        <!-- Department -->
+        <div>
+          <label for="department" class="block text-sm font-medium text-gray-700 mb-2">
+            Department *
+          </label>
+          <select 
+            id="department" 
+            formControlName="department"
+            class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            [class.border-danger]="isFieldInvalid('department')"
+            [class.border-gray-300]="!isFieldInvalid('department')"
+          >
+            <option value="">Select Department</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Product">Product</option>
+            <option value="Design">Design</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Sales">Sales</option>
+            <option value="HR">Human Resources</option>
+            <option value="Finance">Finance</option>
+            <option value="Operations">Operations</option>
+          </select>
+          <div *ngIf="isFieldInvalid('department')" class="text-danger text-xs mt-1">
+            {{ getFieldError('department') }}
+          </div>
+        </div>
+
+        <!-- Salary -->
+        <div>
+          <label for="salary" class="block text-sm font-medium text-gray-700 mb-2">
+            Annual Salary *
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-gray-500">$</span>
+            <input 
+              type="number" 
+              id="salary" 
+              formControlName="salary"
+              min="0"
+              step="1000"
+              class="block w-full pl-8 pr-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+              [class.border-danger]="isFieldInvalid('salary')"
+              [class.border-gray-300]="!isFieldInvalid('salary')"
+              placeholder="80000"
+            >
+          </div>
+          <div *ngIf="isFieldInvalid('salary')" class="text-danger text-xs mt-1">
+            {{ getFieldError('salary') }}
+          </div>
+        </div>
+
+        <!-- Start Date -->
+        <div>
+          <label for="startDate" class="block text-sm font-medium text-gray-700 mb-2">
+            Start Date *
+          </label>
+          <input 
+            type="date" 
+            id="startDate" 
+            formControlName="startDate"
+            [min]="minDate"
+            class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            [class.border-danger]="isFieldInvalid('startDate')"
+            [class.border-gray-300]="!isFieldInvalid('startDate')"
+          >
+          <div *ngIf="isFieldInvalid('startDate')" class="text-danger text-xs mt-1">
+            {{ getFieldError('startDate') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Offer Letter Content -->
+    <div>
+      <label for="offerContent" class="block text-sm font-medium text-gray-700 mb-2">
+        Job Offer Letter Content *
+      </label>
+      <div class="relative">
+        <textarea 
+          id="offerContent" 
+          formControlName="offerContent"
+          rows="8" 
+          class="block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+          [class.border-danger]="isFieldInvalid('offerContent')"
+          [class.border-gray-300]="!isFieldInvalid('offerContent')"
+          [placeholder]="placeholderText"
+        ></textarea>
+        <div class="absolute bottom-2 right-2 text-xs text-gray-400">
+          Rich text formatting supported
+        </div>
+      </div>
+      <div *ngIf="isFieldInvalid('offerContent')" class="text-danger text-xs mt-1">
+        {{ getFieldError('offerContent') }}
+      </div>
+      <p class="mt-2 text-xs text-gray-500">
+        <i class="fas fa-info-circle mr-1"></i>
+        Use placeholders like [Recipient Name], [Job Title], etc. They will be automatically replaced.
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
+      <button 
+        type="submit" 
+        [disabled]="offerForm.invalid || isLoading"
+        class="flex-1 px-6 py-3 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center hover:bg-opacity-90"
+        [class.bg-primary]="offerForm.valid && !isLoading"
+        [class.text-white]="offerForm.valid && !isLoading"
+        [class.bg-gray-400]="offerForm.invalid || isLoading"
+        [class.text-gray-600]="offerForm.invalid || isLoading"
+        [class.cursor-not-allowed]="offerForm.invalid || isLoading"
+      >
+        <i *ngIf="!isLoading" class="fas fa-file-pdf mr-2"></i>
+        <i *ngIf="isLoading" class="fas fa-spinner fa-spin mr-2"></i>
+        {{ isLoading ? 'Generating...' : 'Generate Offer Letter' }}
+      </button>
+
+      <button 
+        type="button" 
+        (click)="onPreviewPDF()"
+        [disabled]="!canPreview || isLoading"
+        class="flex-1 px-6 py-3 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center"
+        [class.bg-blue-600]="canPreview && !isLoading"
+        [class.hover:bg-blue-700]="canPreview && !isLoading"
+        [class.text-white]="canPreview && !isLoading"
+        [class.bg-gray-100]="!canPreview || isLoading"
+        [class.text-gray-400]="!canPreview || isLoading"
+        [class.cursor-not-allowed]="!canPreview || isLoading"
+      >
+        <i class="fas fa-eye mr-2"></i>
+        Preview PDF
+      </button>
+
+      <button 
+        type="button" 
+        (click)="onSendForSignature()"
+        [disabled]="!canSend || isLoading"
+        class="flex-1 px-6 py-3 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 flex items-center justify-center hover:bg-opacity-90"
+        [class.bg-green-600]="canSend && !isLoading && !isSent"
+        [class.text-white]="canSend && !isLoading"
+        [class.bg-gray-100]="!canSend || isLoading"
+        [class.text-gray-400]="(!canSend || isLoading) && !isSent"
+        [class.cursor-not-allowed]="!canSend || isLoading"
+      >
+        <i *ngIf="!isSent" class="fas fa-paper-plane mr-2"></i>
+        <i *ngIf="isSent" class="fas fa-check mr-2"></i>
+        {{ isSent ? 'Sent' : 'Send for Signature' }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Success/Error Messages -->
+<div *ngIf="successMessage" class="mt-4 p-4 bg-success bg-opacity-10 border border-success rounded-md">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <i class="fas fa-check-circle text-success"></i>
+    </div>
+    <div class="ml-3">
+      <p class="text-sm font-medium text-success">{{ successMessage }}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="errorMessage" class="mt-4 p-4 bg-danger bg-opacity-10 border border-danger rounded-md">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <i class="fas fa-exclamation-triangle text-danger"></i>
+    </div>
+    <div class="ml-3">
+      <p class="text-sm font-medium text-danger">{{ errorMessage }}</p>
+    </div>
+  </div>
+</div>

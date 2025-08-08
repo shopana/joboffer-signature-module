@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prepare Document for Signing - Job Offer Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="job-offer-api.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#7C3AED',
+                        success: '#10B981',
+                        danger: '#EF4444',
+                        warning: '#F59E0B',
+                        blue: {
+                            600: '#2563EB',
+                            700: '#1D4ED8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .text-editor-toolbar {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 8px 12px;
+            background: #f9fafb;
+        }
+        .text-editor-content {
+            min-height: 300px;
+            padding: 12px;
+            border: none;
+            outline: none;
+            resize: none;
+        }
+        .preview-content {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #374151;
+        }
+        .blue-link {
+            color: #2563EB;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="flex items-center justify-between">
+            <h1 class="text-xl font-semibold text-gray-900">Prepare Document for Signing</h1>
+            <button class="px-4 py-2 bg-gray-100 text-gray-600 rounded-md text-sm hover:bg-gray-200">
+                <i class="fas fa-times mr-1"></i> Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg mx-6 mt-4 p-4">
+        <div class="flex items-start">
+            <i class="fas fa-info-circle text-blue-600 mt-0.5 mr-3"></i>
+            <div class="text-sm text-blue-800">
+                <p><strong>On the document preview, the signature line always shows the ordering activity data,</strong></p>
+                <p>even if a later signature is made as part of the contract signing.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-1 gap-6 p-6">
+        <!-- Left Column - Form -->
+        <div class="w-1/2 space-y-6">
+            <!-- Recipient Details -->
+            <div class="bg-white rounded-lg border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">Recipient Details</h2>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">
+                            Full Name
+                        </label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Name"
+                            oninput="updatePreview()"
+                        >
+                    </div>
+                    <div>
+                        <label for="emailAddress" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input 
+                            type="email" 
+                            id="emailAddress" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Example@example.com"
+                            oninput="updatePreview()"
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Offer -->
+            <div class="bg-white rounded-lg border border-gray-200 flex-1">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">Job Offer</h2>
+                </div>
+                
+                <!-- Text Editor Toolbar -->
+                <div class="text-editor-toolbar flex items-center space-x-1">
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('bold')" title="Bold">
+                        <i class="fas fa-bold text-sm"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('italic')" title="Italic">
+                        <i class="fas fa-italic text-sm"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('underline')" title="Underline">
+                        <i class="fas fa-underline text-sm"></i>
+                    </button>
+                    <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('justifyLeft')" title="Align Left">
+                        <i class="fas fa-align-left text-sm"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('justifyCenter')" title="Align Center">
+                        <i class="fas fa-align-center text-sm"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('justifyRight')" title="Align Right">
+                        <i class="fas fa-align-right text-sm"></i>
+                    </button>
+                    <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('insertUnorderedList')" title="Bullet List">
+                        <i class="fas fa-list-ul text-sm"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('insertOrderedList')" title="Numbered List">
+                        <i class="fas fa-list-ol text-sm"></i>
+                    </button>
+                    <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="insertVariable('candidateName')" title="Insert Candidate Name">
+                        <i class="fas fa-user text-sm"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('createLink')" title="Insert Link">
+                        <i class="fas fa-link text-sm"></i>
+                    </button>
+                    <button class="p-2 hover:bg-gray-200 rounded" onclick="formatText('undo')" title="Undo">
+                        <i class="fas fa-undo text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Text Editor Content -->
+                <div 
+                    id="jobOfferEditor" 
+                    class="text-editor-content"
+                    contenteditable="true"
+                    oninput="updatePreview()"
+                    onkeyup="updatePreview()"
+                >
+                    <p>Hi [Candidate's Name],</p>
+                    <br>
+                    <p>We're excited to offer you the [Position Title] role at [Company Name]!</p>
+                    <br>
+                    <p><strong>Start Date:</strong> [Start Date]</p>
+                    <p><strong>Salary:</strong> [Amount]</p>
+                    <p><strong>Location:</strong> [Remote / Office / Hybrid]</p>
+                    <p><strong>Schedule:</strong> [e.g., Full-time]</p>
+                    <br>
+                    <p>Please confirm your acceptance by replying to this email or signing the attached offer letter by <span class="blue-link">[Deadline]</span>.</p>
+                    <br>
+                    <p>We can't wait to have you on the team!</p>
+                    <br>
+                    <p>Best,</p>
+                    <p>[Your Name]</p>
+                    <p>[Your Position]</p>
+                    <p>[Company Name]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Preview -->
+        <div class="w-1/2">
+            <!-- Email Preview -->
+            <div class="bg-white rounded-lg border border-gray-200 shadow-sm max-h-[600px] flex flex-col">
+                <!-- Email Header -->
+                <div class="px-4 py-4 border-b border-gray-200 bg-gray-50">
+                    <div class="flex justify-center">
+                        <img src="../Logo.jpg" alt="Company Logo" class="h-10 w-auto object-contain">
+                    </div>
+                </div>
+
+                <!-- Email Toolbar -->
+                <div class="px-4 py-2 border-b border-gray-100 bg-white flex items-center space-x-4">
+                    <button class="text-gray-500 hover:text-gray-700 text-sm">
+                        <i class="fas fa-reply mr-1"></i> Reply
+                    </button>
+                    <button class="text-gray-500 hover:text-gray-700 text-sm">
+                        <i class="fas fa-forward mr-1"></i> Forward
+                    </button>
+                    <button class="text-gray-500 hover:text-gray-700 text-sm">
+                        <i class="fas fa-star mr-1"></i> Star
+                    </button>
+                    <button class="text-gray-500 hover:text-gray-700 text-sm">
+                        <i class="fas fa-archive mr-1"></i> Archive
+                    </button>
+                </div>
+                
+                <!-- Email Content -->
+                <div class="flex-1 overflow-y-auto p-6">
+                    <!-- Email Body -->
+                    <div id="previewContent" class="preview-content text-sm text-gray-800 leading-relaxed">
+                        <!-- Content will be dynamically updated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="p-4 border-t border-gray-200 bg-gray-50 space-y-3">
+                    <button id="generateBtn" onclick="generateOfferLetter()" class="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
+                        <i class="fas fa-file-pdf mr-2"></i>
+                        <span>Generate Offer Letter</span>
+                    </button>
+                    
+                    <button id="previewBtn" onclick="previewPDF()" disabled class="w-full bg-gray-100 text-gray-400 py-2.5 px-4 rounded-lg font-medium cursor-not-allowed text-sm">
+                        <i class="fas fa-eye mr-2"></i>
+                        <span>Preview PDF</span>
+                    </button>
+                    
+                    <button id="sendForSignatureBtn" onclick="sendForSignature()" disabled class="w-full bg-gray-100 text-gray-400 py-2.5 px-4 rounded-lg font-medium cursor-not-allowed text-sm">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        <span>Send for signature</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            updatePreview();
+        }
+
+        function insertVariable(variable) {
+            const variables = {
+                candidateName: '[Candidate\'s Name]',
+                positionTitle: '[Position Title]',
+                companyName: '[Company Name]',
+                startDate: '[Start Date]',
+                amount: '[Amount]',
+                location: '[Remote / Office / Hybrid]',
+                deadline: '[Deadline]'
+            };
+            
+            const editor = document.getElementById('jobOfferEditor');
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            
+            const textNode = document.createTextNode(variables[variable] || `[${variable}]`);
+            range.insertNode(textNode);
+            
+            // Move cursor after inserted text
+            range.setStartAfter(textNode);
+            range.setEndAfter(textNode);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const editorContent = document.getElementById('jobOfferEditor').innerHTML;
+            const fullName = document.getElementById('fullName').value || '[Candidate\'s Name]';
+            const emailAddress = document.getElementById('emailAddress').value || 'Example@example.com';
+            
+            // Update preview with editor content
+            let previewContent = editorContent;
+            
+            // Replace placeholder variables with actual values or keep them as placeholders
+            previewContent = previewContent.replace(/\[Candidate's Name\]/g, `<span class="blue-link">${fullName}</span>`);
+            previewContent = previewContent.replace(/\[Email\]/g, `<span class="blue-link">${emailAddress}</span>`);
+            
+            // Apply blue-link class to other placeholders
+            previewContent = previewContent.replace(/\[([^\]]+)\]/g, '<span class="blue-link">[$1]</span>');
+            
+            document.getElementById('previewContent').innerHTML = previewContent;
+        }
+
+        // Initialize preview on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+        });
+
+        // Add some sample data for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // You can pre-fill some data here if needed
+            setTimeout(() => {
+                updatePreview();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
